@@ -1,0 +1,57 @@
+\begin{thebibliography}{1}
+
+\bibitem{cao2012spatial}
+Xin Cao, Lisi Chen, Gao Cong, Christian~S Jensen, Qiang Qu, Anders Skovsgaard,
+  Dingming Wu, and Man~Lung Yiu.
+\newblock Spatial keyword querying.
+\newblock In {\em Conceptual Modeling}, pages 16--29. Springer, 2012.
+
+\bibitem{skovsgaard2014top}
+Anders Skovsgaard and Christian~S Jensen.
+\newblock Top-k point of interest retrieval using standard indexes.
+\newblock In {\em Proceedings of the 22nd ACM SIGSPATIAL International
+  Conference on Advances in Geographic Information Systems}, pages 173--182.
+  ACM, 2014.
+
+\bibitem{guttman1984r}
+Antonin Guttman.
+\newblock {\em R-trees: a dynamic index structure for spatial searching},
+  volume~14.
+\newblock ACM, 1984.
+
+\bibitem{zobel2006inverted}
+Justin Zobel and Alistair Moffat.
+\newblock Inverted files for text search engines.
+\newblock {\em ACM computing surveys (CSUR)}, 38(2):6, 2006.
+
+\bibitem{zhang2013scalable}
+Dongxiang Zhang, Kian-Lee Tan, and Anthony~KH Tung.
+\newblock Scalable top-k spatial keyword search.
+\newblock In {\em Proceedings of the 16th International Conference on Extending
+  Database Technology}, pages 359--370. ACM, 2013.
+
+\bibitem{chen2013spatial}
+Lisi Chen, Gao Cong, Christian~S Jensen, and Dingming Wu.
+\newblock Spatial keyword query processing: an experimental evaluation.
+\newblock {\em Proceedings of the VLDB Endowment}, 6(3):217--228, 2013.
+
+\bibitem{cary2010efficient}
+Ariel Cary, Ouri Wolfson, and Naphtali Rishe.
+\newblock Efficient and scalable method for processing top-k spatial boolean
+  queries.
+\newblock In {\em Scientific and Statistical Database Management}, pages
+  87--95. Springer, 2010.
+
+\bibitem{cong2009efficient}
+Gao Cong, Christian~S Jensen, and Dingming Wu.
+\newblock Efficient retrieval of the top-k most relevant spatial web objects.
+\newblock {\em Proceedings of the VLDB Endowment}, 2(1):337--348, 2009.
+
+\bibitem{rocha2011efficient}
+Jo{\~a}o~B Rocha-Junior, Orestis Gkorgkas, Simon Jonassen, and Kjetil
+  N{\o}rv{\aa}g.
+\newblock Efficient processing of top-k spatial keyword queries.
+\newblock In {\em Advances in Spatial and Temporal Databases}, pages 205--222.
+  Springer, 2011.
+
+\end{thebibliography}

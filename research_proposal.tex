@@ -1,0 +1,113 @@
+ \documentclass[11pt,a4paper]{article}
+ \usepackage[hidelinks,colorlinks=false]{hyperref}
+ %\usepackage[titletoc,title]{appendix}
+ \usepackage[nottoc]{tocbibind}
+ \usepackage{graphicx,cite}
+ \usepackage{makeidx,times}
+ \usepackage{setspace}
+ \usepackage[margin=1.0in]{geometry}
+ \usepackage{authblk}
+ \usepackage{rotating}
+ \usepackage{cleveref}
+ \usepackage{float}
+ \usepackage{amsmath}
+ \usepackage{tikz}
+ \usepackage{hyperref}
+ \usetikzlibrary{arrows}
+ \graphicspath{{images/}}
+ 
+ \floatstyle{ruled}
+ \newfloat{program}{thp}{lop}
+ \floatname{program}{Program}
+ 
+ \begin{document}
+ 	\title{Research Proposal \\\vspace{7px} Efficient Indexing and Query Processing of\\ Large-scale Spatially Rich User-generated Content\vspace{-1ex}}
+ 	\author{Usvyatsov Mikhail\\
+ 		\normalsize Supervised by Prof. Qiang Qu\\
+ 		\href{http://www.dainfos.com}{Dainfos Lab, Innopolis University}\\  \vspace{-1ex}}
+ 	\date{\normalsize \today\vspace{-1ex}}
+ 	\maketitle
+ 	
+ 	\section{Abstract}
+ 	
+ 	During the past decade, we have witnessed an exponential growth of user-generated data, such as social networked data.
+ 	The increasing volume and complexity of user-generated content pose a great challenge to efficiently manage the data.  
+ 	To be noted, with the increasing use of geo-enabled devices (e.g., smartphones and tablets), a large volume of such content associated with geo-locations are becoming available. Particularly, enriched by other social media, e.g., textual description of business entities on Google Business, images of places of interest on Instagram, and user interactions on Twitter,  geo-tagged content enable a wide array of location-based services. These services include but not limited to location-aware web search, location-based recommendation, and location prediction. In this proposal,  such geo-tagged content is termed spatially rich data. Based on these trends on spatially rich data, I am interested in exploring research touching upon data indexing, query processing, and applications of such content. In this proposal,  some initial ideas are briefly presented on data indexing and query processing where spatial and textual properties of objects available on the web are taken into account. 
+ 	
+ 	\section{Introduction}
+ 	
+ 	We are witnessing a development where increasing volumes of data content is being associated with locations, yielding what we term points of interest (POIs). Each POI has a location and a set of non-spatial properties especially textual descriptions. It has been reported that 25\% of tweets from mobile devices are associated with locations. This trend is reshaping one of the most important services on the web --- keyword search. Billions of search queries are processed each day, a substantial fraction of which have local intent, meaning that they target web content that relates to places near the user. Studies report that 20\% of Google desktop searches and 53\% of mobile Bing searches have local intent. However, we have found that queries with spatial and non-spatial properties often result in computationally expensive. 
+ 	
+ 	Top-k queries have drawn substantial attention because of wide applications. To consider spatial constraints in web search, we may consider one type of top-k queries as a top-k spatial search. It searches most relevant POIs in a Region of Interest (ROI) considering both spatial and textual properties of objects. An object is represented by its spatial location (e.g., GPS coordinates) and textual description (e.g., business description of a shop)~\cite{cao2012spatial}. To address this problem, there exist several important questions that have to be tackled:
+ 	\begin{enumerate}
+ 		\item Given a dataset, how to efficiently index the data to enable efficient query processing?
+ 		\item How to combine new indexing methods with existing DBMS systems and tools?
+ 		\item How to incrementally maintain the data indexing and provide streaming services?
+ 		\item How to rank such objects by means of two different types of properties?
+ 	\end{enumerate}
+ 	
+ 	%Because mobile users become the majority of Internet users \cite{cao2012spatial}, spatial queries will be considered in the context of navigation with GPS coordinates where latitude and longitude represents the object location.
+ 	
+ 	The rest of the paper is organized as follows. Section 3 briefly reviews the literature. Section 4 reports some of my current work. Finally, future work is discussed in Section 5.
+ 	
+ 	\section{Related Work}
+ 	Several recent studies propose to use the following representation of spatial textual objects: \cite{cao2012spatial,zhang2013scalable,cong2009efficient}. 
+ 	\begin{description}
+ 		\centering
+ 		\item D = $<$D.id, D.lat, D.lng, D.terms$>$,
+ 	\end{description}
+ 	Where D is a document consisting of textual terms D.terms.  D has id D.id, and spatial coordinates D.lat (latitude) and D.lng (longitude).
+ 	
+ 	Given a query with a location and a set of textual terms, according to the study~\cite{rocha2011efficient}, the scoring relevance can be calculated by Equation~\ref{eq:ranking}:
+ 	\begin{equation}\label{eq:ranking}
+ 	\tau(D, q) = \alpha \cdot \delta(D.l, q.l) + (1 - \alpha) \cdot \theta(D.d, q.d),
+ 	\end{equation}
+ 	Where $\delta(D.l, q.l)$ denotes the spatial proximity between document and query locations, $\theta(D.d, q.d)$ is textual relevance of a document against the query terms, and $alpha \in (0, 1)$ is a parameter that specifies balance of importance between textual and spatial relevance scores. Note that textual proximity computation depends on document representation, e.g. Bag-of-words model or vector space model.
+ 	
+ 	
+ 	Many of existing studies \cite{cao2012spatial,chen2013spatial,cong2009efficient} on spatial textual queries often use the combination of R-tree~\cite{guttman1984r} for the spatial indexing and inverted index~\cite{zobel2006inverted} for text indexing~\cite{skovsgaard2014top}. There are several methods that have been proposed for top-k query processing: 
+ 	
+ 	\begin{enumerate}
+ 		\item text-first search methods (I3 \cite{zhang2013scalable}, S2I \cite{chen2013spatial})
+ 		\item spatial-first search methods(SKI \cite{cary2010efficient}) \cite{cong2009efficient}
+ 		\item combined methods (IR-tree \cite{cong2009efficient})
+ 	\end{enumerate}
+ 	
+ 	Text-first search methods consider textual index first, using textual terms to filter search results and then considering the 
+ 	constraints of spatial locations. Spatial-first search methods are the opposite case. Combined methods integrate the two types of indexing structures. Among them, I3, S2I, and IR-tree have been paid widely attention. 
+ 	
+ 	I3 is organized as inverted index with terms as keys and postings of Quadtrees. This structure is very efficient. However, it still has many problems, e.g. when a lot of objects are located on the same street, the size of postings lists increases very fast and search over it becomes slower. It also inherits all the limitations of Quadtree. Furthermore, in our experiments, we find that when objects share the same location, I3 simply could not perform indexing. 
+ 	
+ 	S2I consists of three components: vocabulary, blocks, and trees. The main idea of S2I is to store documents of different frequencies differently. The most frequent terms are stored in R-tree while rare documents are stored in blocks. The term is considered to be frequent if its frequency reaches a predefined threshold T. It works well because terms in a corpus follows Zipf's low, which means that there are not so many very frequent terms \cite{rocha2011efficient}. However, it is hard to predefine the threshold before looking into the datasets carefully. When T is small, we will frequently read objects from blocks which could not leverage the advantages of fast spatial search through R-trees. On the other hand, when T is big, many keywords become infrequent that affects spatial pruning during query processing. 
+ 	
+ 	IR-trees combines R-tree and textual indexing. Each node of R-tree is augmented by an inverted index on the textual terms of all the objects within the node. It allows to make textual pruning while pruning locations. However, this approach requires very high cost of updates: even one node split will require to rebuild all inverted indexes. Moreover, a large number of pseudo documents have to be accessed when a query contains frequent keywords, which means high IO. Hence, IR-tree cannot be scaled to a large-scale dataset. 
+ 	
+ 	\section{Current Work}
+ 	I am now working on a project at \href{http://dainfos.com}{Dainfos lab} advised by prof. Qiang Qu. We have done an experimental comparison of the three algorithms: I3, S2I and IR-trees on a collection of Twitter data. Furthermore, the work under a new algorithm was started.
+ 	
+ 	Initial experiments are tested on a small dataset with 36000 documents, where I have done a unified platform to preprocess the data that can be fed into the three algorithms. A test algorithm is implemented, which generates random queries, launch algorithms, and report algorithms automatically. As follows, we show some initial results obtained by average performance on random queries with 15 keywords and 50 queries. 
+ 	
+ 	\begin{table}[h]
+ 		\centering
+ 		\caption{Test results} 
+ 		\begin{tabular}{lll}
+ 			name & average IO & average time per query, ms \\ \hline
+ 			I3 & 14.9 & 8.7 \\
+ 			S2I & 12.3 & 13.3  \\
+ 			IR-tree & 105.1 & 510
+ 		\end{tabular}
+ 	\end{table}
+ 	
+ 	Further experiments will be done on a very large Twitter dataset collected in 2013 and 2014 containing geo-tagged tweets across the world. 
+ 	
+ 	The study \cite{skovsgaard2014top} proposes an indexing method that doesn't require changing current system architectures (e.g., DBMS). At the moment, I am collaborated with Prof. Qiang Qu and Dr. Anders Skovosgaard to extend the study to support top-k queries, comparing with the above three methods. Moreover, I have already written the index construction algorithm based on key-value storage. For the moment comparison between  Dr. Skovosgaard's algorithm results and my algorithm results is in progress.
+ 	
+ 	\section{Future work}
+ 	Many studies can be conducted in this area. A possible topic that can be considered at this moment is incremental maintenance of the indexed data. Additionally, considering the challenge that the available data is growing, which requires parallel and efficient computation, many new software/hardware architectures can be considered, such as Spark, Hadoop, and GPUs. 
+ 	
+ 	As shown in the above sections, I am also interested in data query processing and data-intensive applications. Studies on various queries combining existing DBMSs and real applications (e.g., location prediction and incomplete data mining) will be considered for future work as well.
+ 	
+ 	\bibliographystyle{unsrt}
+ 	\bibliography{research_proposal}
+ 	
+ \end{document}
